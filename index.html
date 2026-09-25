@@ -1299,6 +1299,7 @@ const Edit = {
     const i = this.i, box = this.box;
     Object.assign(this, { i: -1, ta: null, box: null, orig: '', base: '', entryId: null, region: null, ids: [], failed: '', composing: false, unsure: null });
     if (box) box.remove();
+    if (S.cur === i) setCur(-1);
     const para = pEl(i); if (para) { para.hidden = false; rerenderPara(i); }
     Translit.clear();
     Resume.saveSoon();
@@ -1365,7 +1366,7 @@ const Resume = {
   save() {
     const p = P(); if (!p || $('#split').hidden) return;
     const pg = Pages.cur();
-    const d = { proj: p.id, page: pg ? pg.key : null, top: topVisibleIdx(), cur: S.cur, t: now() };
+    const d = { proj: p.id, page: pg ? pg.key : null, top: topVisibleIdx(), t: now() };
     if (Edit.active() && Edit.ta) d.draft = { i: Edit.i, orig: Edit.orig, value: Edit.ta.value, sel: Edit.ta.selectionStart };
     LS.set(this.key(), d);
   },
@@ -1608,11 +1609,10 @@ async function openProject(id) {
   renderText();
   banner(null);
   const r = LS.get(Resume.key(), null);
-  let page = 0, top = null, cur = null, draft = null;
-  if (r && r.proj === id && (!p.pos || r.t >= p.pos.t)) { page = Math.max(0, Pages.indexOf(r.page)); top = r.top; cur = r.cur; draft = r.draft; }
+  let page = 0, top = null, draft = null;
+  if (r && r.proj === id && (!p.pos || r.t >= p.pos.t)) { page = Math.max(0, Pages.indexOf(r.page)); top = r.top; draft = r.draft; }
   else if (p.pos) { page = Math.max(0, Pages.indexOf(p.pos.page)); top = p.pos.para; }
   if (top != null && Doc.paras.length) scrollToPara(clamp(top, 0, Doc.paras.length - 1));
-  if (cur != null && cur >= 0 && cur < Doc.paras.length) setCur(cur);
   await goPage(page);
   if (!Doc.canEdit) readOnlyNote();
   else if (draft) {
