@@ -742,7 +742,9 @@ const Pages = {
   async load(p) {
     this.list = []; this.idx = 0;
     if (DEMO) { this.list = demoPages(); return; }
-    const files = await listFolder(p.folderId);
+    const files = p.scanFile
+      ? [await api(`${DRIVE}/files/${p.folderId}?fields=id,name,mimeType,size&supportsAllDrives=true`)]
+      : await listFolder(p.folderId);
     const imgs = files.filter(f => /^image\/(jpeg|png|webp|gif|bmp)$/.test(f.mimeType));
     const pdfs = files.filter(f => f.mimeType === 'application/pdf');
     const heic = files.filter(f => /heic|heif/i.test(f.mimeType)).length;
@@ -1448,34 +1450,35 @@ function parseDocLink(s) {
 }
 function parseFolderLink(s) {
   s = (s || '').trim();
-  const m = s.match(/\/folders\/([\w-]{10,})/) || s.match(/[?&]id=([\w-]{10,})/) || s.match(/^([\w-]{20,})$/);
+  const m = s.match(/\/folders\/([\w-]{10,})/) || s.match(/\/file\/d\/([\w-]{10,})/) || s.match(/[?&]id=([\w-]{10,})/) || s.match(/^([\w-]{20,})$/);
   return m ? m[1] : null;
 }
 function bookFormEl(existing, onDone) {
   const docIn = h('input', { class: 'inp', id: 'docLink', type: 'url', placeholder: 'https://docs.google.com/document/d/…', value: existing ? `https://docs.google.com/document/d/${existing.docId}/edit${existing.tabId ? '?tab=' + existing.tabId : ''}` : '' });
-  const folIn = h('input', { class: 'inp', id: 'folderLink', type: 'url', placeholder: 'https://drive.google.com/drive/folders/…', value: existing ? `https://drive.google.com/drive/folders/${existing.folderId}` : '' });
+  const folIn = h('input', { class: 'inp', id: 'folderLink', type: 'url', placeholder: 'https://drive.google.com/drive/folders/…', value: existing ? (existing.scanFile ? `https://drive.google.com/file/d/${existing.folderId}/view` : `https://drive.google.com/drive/folders/${existing.folderId}`) : '' });
   const nameIn = h('input', { class: 'inp', id: 'bookNameIn', type: 'text', placeholder: 'Taken from the Doc title if left empty', value: existing ? existing.name : '' });
   const err = h('div', { class: 'err', role: 'alert' });
   const go = h('button', { class: 'btn primary', type: 'submit' }, existing ? 'Save changes' : 'Open book');
   const form = h('form', { class: 'field', style: 'gap:14px' },
     h('div', { class: 'field' }, h('label', { for: 'docLink' }, 'Google Doc with the typed text'), docIn, h('span', { class: 'help' }, 'Copy the link from the browser’s address bar while the Doc is open.')),
-    h('div', { class: 'field' }, h('label', { for: 'folderLink' }, 'Google Drive folder with the scanned pages'), folIn, h('span', { class: 'help' }, 'JPG, PNG or PDF files. Pages are taken in file-name order (10.jpg before 11.jpg).')),
+    h('div', { class: 'field' }, h('label', { for: 'folderLink' }, 'Google Drive folder (or single PDF) with the scanned pages'), folIn, h('span', { class: 'help' }, 'A folder of JPG, PNG or PDF files, taken in file-name order (10.jpg before 11.jpg) — or the link of one PDF.')),
     h('div', { class: 'field' }, h('label', { for: 'bookNameIn' }, 'Name (optional)'), nameIn),
     err, h('div', { class: 'row' }, go));
   form.addEventListener('submit', async e => {
     e.preventDefault(); err.textContent = '';
     const d = parseDocLink(docIn.value), f = parseFolderLink(folIn.value);
     if (!d) { err.textContent = 'That doesn’t look like a Google Doc link. It should contain /document/d/.'; return; }
-    if (!f) { err.textContent = 'That doesn’t look like a Drive folder link. It should contain /folders/.'; return; }
+    if (!f) { err.textContent = 'That doesn’t look like a Drive folder or PDF link. It should contain /folders/ or /file/d/.'; return; }
     go.disabled = true; go.textContent = 'Checking…';
     try {
       const j = await api(`${DOCS}/${d.docId}?fields=title`);
       const fo = await api(`${DRIVE}/files/${f}?fields=name,mimeType&supportsAllDrives=true`);
-      if (fo.mimeType !== 'application/vnd.google-apps.folder') throw new Error('The second link is a file, not a folder.');
+      const scanFile = fo.mimeType === 'application/pdf';
+      if (fo.mimeType !== 'application/vnd.google-apps.folder' && !scanFile) throw new Error('The second link is a file that isn’t a PDF. Use the link of the scans folder or of one PDF.');
       const name = nameIn.value.trim() || j.title;
       let id;
-      if (existing) { Object.assign(Store.data.projects[existing.id], { name, docId: d.docId, tabId: d.tabId, folderId: f, t: now() }); id = existing.id; }
-      else { id = uid(); Store.data.projects[id] = { id, name, docId: d.docId, tabId: d.tabId, folderId: f, t: now(), links: {}, done: {}, rot: {}, log: {}, pos: null }; }
+      if (existing) { Object.assign(Store.data.projects[existing.id], { name, docId: d.docId, tabId: d.tabId, folderId: f, scanFile, t: now() }); id = existing.id; }
+      else { id = uid(); Store.data.projects[id] = { id, name, docId: d.docId, tabId: d.tabId, folderId: f, scanFile, t: now(), links: {}, done: {}, rot: {}, log: {}, pos: null }; }
       Store.touch();
       onDone(id);
     } catch (ex) {

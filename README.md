@@ -58,7 +58,7 @@ The first sign-in shows *"Google hasn't verified this app"*. It's your own copy:
 
 ## The scans
 
-- Put the scanned pages in **one Drive folder** as JPG, PNG or PDF (a PDF can hold many pages).
+- Put the scanned pages in **one Drive folder** as JPG, PNG or PDF (a PDF can hold many pages). If the scans are one PDF in a folder shared with other books, paste the link of that PDF instead of the folder.
 - Pages are taken in file-name order with numbers sorted properly: `10.jpg` comes before `11.jpg` and `100.jpg`. If a file name ends in a number of up to four digits, that number is shown as the page number.
 - iPhone HEIC photos can't be shown by browsers — export them as JPG. Samsung camera photos are already JPG.
 - A sideways photo can be turned with the rotate button; the app remembers the turn for that page.

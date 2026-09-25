@@ -1,6 +1,6 @@
 // Melvani service worker: makes the app installable and quick to open.
 // Only the app's own files are cached. Google data (Docs, Drive, sign-in) is never cached.
-const VERSION = 'melvani-v1';
+const VERSION = 'melvani-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
