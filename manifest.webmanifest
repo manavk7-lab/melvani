@@ -1,0 +1,17 @@
+{
+  "name": "Melvani — proofread against the handwriting",
+  "short_name": "Melvani",
+  "description": "Compare scanned handwritten pages with the typed Google Doc and fix mistakes in place.",
+  "lang": "gu",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5F6F9",
+  "theme_color": "#2B3F8F",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
