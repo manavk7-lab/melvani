@@ -9,3 +9,4 @@ Single-file PWA (`index.html`) for proofreading handwritten scans against the ty
 - Saves: Docs API batchUpdate with minimal diffs + `targetRevisionId` retry. Progress syncs via Drive appDataFolder.
 - Untested: the ગુ typing helper (unofficial Google input-tools) and iPad home-screen sign-in.
 - Bump `VERSION` in sw.js when shipping changes to cached shell files.
+- Scans source: a Drive folder, or a single PDF (`scanFile: true` on the project, `folderId` then holds the file id).
