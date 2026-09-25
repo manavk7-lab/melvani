@@ -57,6 +57,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
 .app{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
+.app>.bar{grid-row:1}.app>.banner{grid-row:2}.app>.split,.app>.welcome{grid-row:3}
 /* header */
 .bar{display:flex;align-items:center;gap:6px;padding:6px 16px;min-height:54px;background:var(--surface);border-bottom:1px solid var(--rule);position:relative;z-index:5}
 .ib{display:inline-grid;place-items:center;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--ink-2);cursor:pointer;flex:none}
