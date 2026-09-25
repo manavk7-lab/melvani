@@ -56,7 +56,7 @@ button{font:inherit;color:inherit}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-.app{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr)}
+.app{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
 /* header */
 .bar{display:flex;align-items:center;gap:6px;padding:6px 16px;min-height:54px;background:var(--surface);border-bottom:1px solid var(--rule);position:relative;z-index:5}
 .ib{display:inline-grid;place-items:center;width:40px;height:40px;border:0;border-radius:10px;background:transparent;color:var(--ink-2);cursor:pointer;flex:none}
@@ -85,12 +85,11 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
 .btn.danger{color:var(--err);border-color:color-mix(in srgb,var(--err) 40%,var(--rule))}
 .btn:disabled{opacity:.5;cursor:default}
-.hide-narrow{}
 @media (max-width:640px){
   .bar{padding:6px 10px;gap:3px}
   .ib{width:38px;height:38px}
-  .book,.hide-narrow{display:none}
-  .pager{flex:1;justify-content:center}
+}
+@media (max-width:480px){
   .btn .lbl{display:none}
   .btn#btnDone{padding:0 11px}
 }
@@ -104,7 +103,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 @media (orientation:landscape) and (min-width:720px){
   .split{grid-template-rows:minmax(0,1fr);grid-template-columns:var(--split-x) 10px minmax(0,1fr)}
 }
-.split.swap .scan{order:3}.split.swap .divider{order:2}.split.swap .textpane{order:1}
+.split.swap .scan{order:3}.split.swap .divider{order:2}.split.swap .textwrap{order:1}
 
 /* scan pane — a light table */
 .scan{position:relative;min-height:0;min-width:0;background:var(--table);color:var(--table-ink);overflow:hidden}
@@ -116,11 +115,14 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .ruler{position:absolute;left:0;right:0;height:46px;box-shadow:0 0 0 100vmax rgba(8,10,16,.38);border-top:2px solid var(--rose);border-bottom:2px solid var(--rose);cursor:ns-resize;touch-action:none;z-index:2}
 .ruler .grip{position:absolute;right:10px;bottom:-11px;width:34px;height:20px;border-radius:10px;background:var(--rose);display:grid;place-items:center;cursor:ns-resize}
 .ruler .grip::before{content:"";width:14px;height:2px;background:#fff;box-shadow:0 4px 0 #fff}
-.scan-tools{position:absolute;right:10px;bottom:10px;display:flex;gap:2px;padding:3px;border-radius:12px;background:color-mix(in srgb,var(--table-2) 88%,transparent);backdrop-filter:blur(6px);z-index:3}
+.scan-bar{position:absolute;left:10px;right:10px;bottom:10px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;z-index:3;pointer-events:none}
+.scan-tools{display:flex;align-items:center;gap:2px;padding:3px;border-radius:12px;background:color-mix(in srgb,var(--table-2) 88%,transparent);backdrop-filter:blur(6px);pointer-events:auto}
 .scan-tools .ib{color:var(--table-ink);width:38px;height:38px}
 .scan-tools .ib:hover,.scan-tools .ib[aria-pressed="true"]{background:rgba(255,255,255,.14);color:#fff}
-.fname{position:absolute;left:12px;bottom:14px;max-width:calc(100% - 240px);font-size:12px;color:var(--table-ink);opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:3;pointer-events:none}
-.follow{position:absolute;left:50%;top:10px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:5px 6px 5px 12px;border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:var(--shadow);font-size:13px;z-index:4;white-space:nowrap}
+.scan-tools .ib:disabled{background:transparent}
+.scan-tools .pagechip{height:38px;background:transparent;border-color:rgba(255,255,255,.22);color:var(--table-ink)}
+.scan-tools .pagechip .of{color:inherit;opacity:.7}
+@media (max-width:480px){#zOut,#zIn{display:none}}
 
 .divider{background:var(--rule);cursor:row-resize;position:relative;touch-action:none}
 .divider::after{content:"";position:absolute;left:50%;top:50%;width:36px;height:4px;border-radius:2px;background:var(--ink-3);transform:translate(-50%,-50%)}
@@ -130,7 +132,9 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 }
 
 /* text pane */
-.textpane{position:relative;min-height:0;overflow-y:auto;overscroll-behavior:contain;background:var(--surface);-webkit-overflow-scrolling:touch}
+.textwrap{position:relative;min-height:0;min-width:0}
+.textpane{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;background:var(--surface);-webkit-overflow-scrolling:touch}
+.text-tools{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:2px;padding:3px;border-radius:12px;background:var(--surface);border:1px solid var(--rule);box-shadow:var(--shadow);z-index:3}
 .text{max-width:40em;margin:0 auto;padding:18px 18px 40vh 50px;font-family:var(--text-font);font-size:var(--fs);line-height:1.8;color:var(--ink)}
 @media (max-width:640px){.text{padding:14px 16px 45vh 40px}}
 .text p{position:relative;margin:0 0 .55em;padding:2px 6px;border-radius:6px;text-indent:1.4em;white-space:pre-wrap;overflow-wrap:anywhere;cursor:text;transition:background-color .15s}
@@ -145,10 +149,6 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .text p.flash{animation:flash 1.2s ease-out}
 @keyframes flash{0%{background:var(--rose-soft)}100%{background:transparent}}
 .vref{font-family:var(--ui);font-size:.8em;font-weight:600;color:var(--accent);padding:0 .3em;border-radius:4px;background:var(--accent-soft);font-variant-numeric:tabular-nums;text-indent:0}
-.pmark{position:absolute;left:-44px;top:.35em;text-indent:0;font:600 11px/1.5 var(--ui);color:var(--rose);border:1px solid var(--rose);border-radius:4px;padding:0 4px;background:var(--surface);font-variant-numeric:tabular-nums;white-space:nowrap}
-@media (max-width:640px){.pmark{left:-36px}}
-.pmark.here{background:var(--rose);color:#fff}
-.hint{position:sticky;top:8px;z-index:3;margin:8px auto 0;width:fit-content;max-width:calc(100% - 32px);display:flex;align-items:center;gap:8px;padding:6px 8px 6px 12px;border-radius:12px;background:var(--surface);box-shadow:var(--shadow);font-size:13px;color:var(--ink-2)}
 
 /* editing */
 .editbox{margin:0 0 .6em;display:flex;flex-direction:column;gap:8px}
@@ -160,6 +160,9 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .chip{flex:none;height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--rule);background:var(--paper);cursor:pointer;font-size:17px}
 .chip.top{border-color:var(--accent);background:var(--accent-soft)}
 .gu-toggle{font-family:var(--sans-gu);font-weight:600}
+.edit-state{font-size:13px;color:var(--ink-3);white-space:nowrap}
+.edit-state.ok{color:var(--ok)}
+.edit-state.err{color:var(--err);font-weight:600}
 .edit-msg{font-family:var(--ui);font-size:13px;color:var(--err)}
 .edit-msg.note{color:var(--ink-3)}
 .edit-msg:empty{display:none}
@@ -173,13 +176,11 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .prog .track{height:6px;border-radius:3px;background:var(--rule);overflow:hidden}
 .prog .fill{height:100%;background:var(--ok)}
 .plist{flex:1;overflow-y:auto;padding:6px 8px}
-.prow{display:grid;grid-template-columns:34px 52px 1fr auto;align-items:center;gap:6px;min-height:42px;padding:0 8px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
+.prow{display:grid;grid-template-columns:34px 52px 1fr;align-items:center;gap:6px;min-height:42px;padding:0 8px;border-radius:8px;cursor:pointer;font-variant-numeric:tabular-nums}
 .prow:hover{background:var(--paper)}
 .prow.on{background:var(--accent-soft)}
 .prow .lab{font-weight:600}
 .prow .nm{font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prow .st{display:flex;gap:6px;color:var(--ink-3)}
-.prow .st .pin{color:var(--rose)}
 .ck{width:22px;height:22px;border-radius:6px;border:2px solid var(--ink-3);display:grid;place-items:center;background:transparent;cursor:pointer;padding:0}
 .ck[aria-checked="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
 .ck svg{width:14px;height:14px;stroke-width:3}
@@ -251,15 +252,9 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   <header class="bar">
     <button id="btnMenu" class="ib" aria-label="Pages and books" title="Pages and books"></button>
     <div class="book"><b id="bookName">Melvani</b><span id="syncState" class="sync" data-s="ok">Ready</span></div>
-    <nav class="pager" aria-label="Manuscript page">
-      <button id="btnPrev" class="ib" aria-label="Previous page" title="Previous page (←)"></button>
-      <button id="pageChip" class="pagechip" aria-label="Page list"><span class="pn" id="pageNum">–</span><span class="of" id="pageCount">–</span></button>
-      <button id="btnNext" class="ib" aria-label="Next page" title="Next page (→)"></button>
-    </nav>
     <div class="actions">
-      <button id="btnGoto" class="ib hide-narrow" aria-label="Find verse or text" title="Find verse or text (/)"></button>
-      <button id="btnLink" class="ib" aria-label="This page starts at the selected paragraph" title="Page starts here (P)"></button>
-      <button id="btnDone" class="btn primary" title="Mark page checked and go to next (D)"><span id="doneIcon"></span><span class="lbl">Page done</span></button>
+      <button id="btnGoto" class="ib" aria-label="Find verse or text" title="Find verse or text (/)"></button>
+      <button id="btnDone" class="btn primary" title="Tick off this handwritten page and turn to the next (D)"><span id="doneIcon"></span><span class="lbl">Page done</span></button>
       <button id="btnMore" class="ib" aria-label="More" title="More"></button>
     </div>
   </header>
@@ -271,20 +266,30 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div id="ruler" class="ruler" hidden><span class="grip" aria-hidden="true"></span></div>
         <div id="scanMsg" class="scan-msg"></div>
       </div>
-      <span id="fname" class="fname"></span>
-      <div id="follow" class="follow" hidden></div>
-      <div class="scan-tools" role="toolbar" aria-label="Page view">
-        <button id="zOut" class="ib" aria-label="Zoom out" title="Zoom out (−)"></button>
-        <button id="zFit" class="ib" aria-label="Fit width" title="Fit width (0)"></button>
-        <button id="zIn" class="ib" aria-label="Zoom in" title="Zoom in (+)"></button>
-        <button id="btnRuler" class="ib" aria-label="Reading ruler" title="Reading ruler (R, then ↑ ↓)" aria-pressed="false"></button>
-        <button id="btnRotate" class="ib" aria-label="Rotate page" title="Rotate page"></button>
+      <div class="scan-bar">
+        <nav class="scan-tools" aria-label="Handwritten pages">
+          <button id="btnPrev" class="ib" aria-label="Previous handwritten page" title="Previous handwritten page (←)"></button>
+          <button id="pageChip" class="pagechip" aria-label="List of handwritten pages"><span class="pn" id="pageNum">–</span><span class="of" id="pageCount">–</span></button>
+          <button id="btnNext" class="ib" aria-label="Next handwritten page" title="Next handwritten page (→)"></button>
+        </nav>
+        <div class="scan-tools" role="toolbar" aria-label="Page view">
+          <button id="zOut" class="ib" aria-label="Zoom out" title="Zoom out (−)"></button>
+          <button id="zFit" class="ib" aria-label="Fit width" title="Fit width (0)"></button>
+          <button id="zIn" class="ib" aria-label="Zoom in" title="Zoom in (+)"></button>
+          <button id="btnRuler" class="ib" aria-label="Reading ruler" title="Reading ruler (R, then ↑ ↓)" aria-pressed="false"></button>
+          <button id="btnRotate" class="ib" aria-label="Rotate page" title="Rotate page"></button>
+        </div>
       </div>
     </section>
     <div id="divider" class="divider" role="separator" aria-label="Resize panes" tabindex="0"></div>
-    <section id="textPane" class="textpane" aria-label="Typed text">
-      <div id="hint" class="hint" hidden></div>
-      <article id="text" class="text" lang="gu"></article>
+    <section id="textWrap" class="textwrap" aria-label="Typed text">
+      <div id="textPane" class="textpane">
+        <article id="text" class="text" lang="gu"></article>
+      </div>
+      <div class="text-tools" role="toolbar" aria-label="Move through the typed text">
+        <button id="tUp" class="ib" aria-label="Typed text up one screen" title="Text up one screen (Page Up)"></button>
+        <button id="tDown" class="ib" aria-label="Typed text down one screen" title="Text down one screen (Page Down)"></button>
+      </div>
     </section>
   </main>
   <section id="welcome" class="welcome" hidden></section>
@@ -346,7 +351,7 @@ const LS = {
 const ICONS = {
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   left: '<path d="m15 18-6-6 6-6"/>', right: '<path d="m9 18 6-6-6-6"/>',
-  pin: '<path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/>',
+  up: '<path d="m18 15-6-6-6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
   check: '<path d="M20 6 9 17l-5-5"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   more: '<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',
@@ -369,7 +374,7 @@ const ICONS = {
 };
 const icon = n => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
 
-/* ---------- toast, banner, hint ---------- */
+/* ---------- toast, banner ---------- */
 let toastTimer;
 function toast(msg, action) {
   const t = $('#toast');
@@ -388,21 +393,17 @@ function banner(kind, msg, btn) {
   b.append(h('button', { class: 'ib', 'aria-label': 'Dismiss', html: icon('x'), onclick: () => (b.hidden = true) }));
   b.hidden = false;
 }
-let hintTimer;
-function hint(msg, action, ms = 7000) {
-  const el = $('#hint');
-  clearTimeout(hintTimer);
-  if (!msg) { el.hidden = true; return; }
-  el.replaceChildren(h('span', {}, msg));
-  if (action) el.append(h('button', { class: 'btn small', onclick: () => { el.hidden = true; action.fn(); } }, action.label));
-  el.append(h('button', { class: 'ib', style: 'width:28px;height:28px', 'aria-label': 'Dismiss', html: icon('x'), onclick: () => (el.hidden = true) }));
-  el.hidden = false;
-  if (ms) hintTimer = setTimeout(() => (el.hidden = true), ms);
-}
 function setSync(s, label) {
   const el = $('#syncState');
   el.dataset.s = s;
   el.textContent = label || { ok: 'All changes saved', saving: 'Saving…', error: 'Not synced — will retry', demo: 'Demo · nothing saved to Google' }[s] || '';
+}
+/* The header shows one state for both the Doc fixes and the synced progress. */
+function syncState() {
+  if (DEMO) return;
+  if (Edit.failed) setSync('error', 'A fix is not saved yet');
+  else if (Edit.inflight || Store.flushing || Store.pending) setSync('saving');
+  else setSync('ok');
 }
 
 /* ---------- Google sign-in (redirect, works in home-screen apps) ---------- */
@@ -428,6 +429,7 @@ const Auth = {
   valid() { return !!this.token && this.exp > now() + 60000; },
   signIn() {
     Resume.save();
+    this.leaving = true;
     const state = uid();
     LS.set('oauthState', state);
     const p = new URLSearchParams({
@@ -448,16 +450,20 @@ const Auth = {
 async function api(url, opts = {}) {
   if (!Auth.valid()) throw new AuthError('Sign-in expired');
   const headers = Object.assign({ Authorization: 'Bearer ' + Auth.token }, opts.headers || {});
+  const { timeout, raw, ...init } = opts;
+  const ac = timeout ? new AbortController() : null;
+  const timer = ac && setTimeout(() => ac.abort(), timeout);
   let res;
-  try { res = await fetch(url, { ...opts, headers }); }
-  catch { const e = new Error('No internet connection, or Google could not be reached.'); e.offline = true; throw e; }
+  try { res = await fetch(url, { ...init, headers, signal: ac ? ac.signal : undefined }); }
+  catch { const e = new Error(ac && ac.signal.aborted ? 'Google did not answer in time.' : 'No internet connection, or Google could not be reached.'); e.offline = true; throw e; }
+  finally { clearTimeout(timer); }
   if (res.status === 401) { Auth.token = null; LS.del('tok'); throw new AuthError('Sign-in expired'); }
   if (!res.ok) {
     let msg = 'Google returned error ' + res.status;
     try { const j = await res.json(); if (j.error && j.error.message) msg = j.error.message; } catch {}
     const e = new Error(msg); e.status = res.status; throw e;
   }
-  if (opts.raw) return res;
+  if (raw) return res;
   if (res.status === 204) return null;
   return res.json();
 }
@@ -531,6 +537,7 @@ const Store = {
   touch() {
     if (DEMO) { LS.set('demoStore', this.data); return; }
     LS.set('storeCache', this.data);
+    this.pending = true;
     setSync('saving');
     this.schedule();
   },
@@ -545,7 +552,9 @@ const Store = {
       await this.writeRemote();
       LS.set('storeCache', this.data);
       this.warned = false;
-      setSync('ok');
+      if (!this.again) this.pending = false;
+      this.flushing = false;
+      syncState();
     } catch (e) {
       setSync('error');
       if (e instanceof AuthError) showReauth(); else { console.warn(e); if (!this.warned) { this.warned = true; toast('Progress could not be synced to Drive. It is kept here and will retry.'); } setTimeout(() => this.schedule(), 15000); }
@@ -562,18 +571,23 @@ const Store = {
     } catch (e) { if (!(e instanceof AuthError)) console.warn(e); }
   },
 };
-const S = { projId: null, cur: -1, marks: new Map(), anchors: new Map(), fixed: new Set() };
+const S = { projId: null, cur: -1, anchors: new Map(), fixed: new Set() };
 const P = () => (S.projId ? Store.data.projects[S.projId] : null);
 const liveProjects = () => Object.values(Store.data.projects).filter(p => !p.deleted).sort((a, b) => (b.t || 0) - (a.t || 0));
 
 /* ---------- the Google Doc ---------- */
 const OBJ = '￼';
 const Doc = {
-  id: null, tabId: null, rev: null, title: '', paras: [], tabs: [],
+  id: null, tabId: null, rev: null, title: '', paras: [], tabs: [], canEdit: true,
   async load(p) {
     this.id = p.docId;
-    if (DEMO) { this.title = p.name; this.paras = demoParas(); this.tabId = null; this.rev = 'demo'; return; }
-    const j = await api(`${DOCS}/${encodeURIComponent(p.docId)}?includeTabsContent=true`);
+    if (DEMO) { this.title = p.name; this.paras = demoParas(); this.tabId = null; this.rev = 'demo'; this.canEdit = true; return; }
+    const [j, f] = await Promise.all([
+      api(`${DOCS}/${encodeURIComponent(p.docId)}?includeTabsContent=true`),
+      // A Google account that can only view the Doc can't save fixes: find out up front.
+      api(`${DRIVE}/files/${encodeURIComponent(p.docId)}?fields=capabilities(canEdit)&supportsAllDrives=true`).catch(e => { if (e instanceof AuthError) throw e; return null; }),
+    ]);
+    this.canEdit = !(f && f.capabilities && f.capabilities.canEdit === false);
     this.title = j.title; this.rev = j.revisionId;
     const tabs = [];
     const walk = arr => (arr || []).forEach(t => { tabs.push(t); walk(t.childTabs); });
@@ -631,16 +645,18 @@ function diffRange(a, b) {
 async function applyEdit(i, from, to, ins) {
   const p = Doc.paras[i];
   const del = p.text.slice(from, to);
-  if (del.includes(OBJ) || ins.includes(OBJ)) throw new Error('That part holds an image or special element. Edit it in Google Docs.');
+  if (del.includes(OBJ) || ins.includes(OBJ)) throw Object.assign(new Error('That part holds an image or special element. Edit it in Google Docs.'), { keep: true });
   const tab = Doc.tabId ? { tabId: Doc.tabId } : {};
   const reqs = [];
   if (to > from) reqs.push({ deleteContentRange: { range: { startIndex: p.start + from, endIndex: p.start + to, ...tab } } });
   if (ins) reqs.push({ insertText: { location: { index: p.start + from, ...tab }, text: ins } });
   if (!reqs.length) return;
-  const body = { requests: reqs, writeControl: { targetRevisionId: Doc.rev } };
+  // requiredRevisionId: Google refuses the change if the Doc was edited anywhere else since Melvani
+  // last saw it (the indexes would be off). pushEdit then reloads the text and applies the fix again.
+  const body = { requests: reqs, writeControl: { requiredRevisionId: Doc.rev } };
   Doc.lastRequest = body;
   if (!DEMO) {
-    const r = await api(`${DOCS}/${encodeURIComponent(Doc.id)}:batchUpdate`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const r = await api(`${DOCS}/${encodeURIComponent(Doc.id)}:batchUpdate`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), timeout: 45000 });
     if (r && r.writeControl && r.writeControl.requiredRevisionId) Doc.rev = r.writeControl.requiredRevisionId;
   }
   const delta = ins.length - (to - from);
@@ -652,7 +668,9 @@ function findPara(text, near) {
   Doc.paras.forEach((p, i) => { if (p.text === text && Math.abs(i - near) < bd) { best = i; bd = Math.abs(i - near); } });
   return best;
 }
-async function commitChange(i, oldText, newText) {
+/* Turn paragraph i from oldText into newText in the Doc. If the Doc moved on meanwhile,
+   reload it and find the paragraph again; returns where the paragraph is now. */
+async function pushEdit(i, oldText, newText) {
   const d = diffRange(oldText, newText);
   let reloaded = false;
   try {
@@ -663,38 +681,42 @@ async function commitChange(i, oldText, newText) {
     if (!revIssue || DEMO) throw e;
     await Doc.load(P()); reloaded = true;
     const j = findPara(oldText, i);
-    if (j < 0) throw new Error('This paragraph was changed in Google Docs meanwhile. The text is reloaded — check it and redo the fix.');
+    if (j < 0) throw Object.assign(new Error('This paragraph was changed in Google Docs while you were fixing it, so your fix was not saved. The text is reloaded — please redo the fix.'), { conflict: true });
     i = j;
     await applyEdit(i, d.from, d.to, d.ins);
   }
-  const pg = Pages.cur();
-  const entry = {
-    id: uid(), t: now(), page: pg ? pg.key : null, pageLabel: pg ? pg.label : '', i,
-    ctxB: oldText.slice(Math.max(0, d.from - 16), d.from), del: d.del, ins: d.ins, ctxA: oldText.slice(d.to, d.to + 16), undone: false,
-  };
-  P().log[entry.id] = entry;
-  Store.touch();
-  S.fixed.add(i);
-  return { entry, reloaded };
+  return { i, reloaded };
 }
-async function undoEntry(id) {
+async function undoEntries(ids) {
+  for (const id of [...ids].reverse()) if (!(await undoEntry(id, true))) return;
+  toast('Undone');
+}
+async function undoEntry(id, quiet, retried) {
+  if (Edit.active() && !(await Edit.close())) return false;
   const e = P().log[id];
-  if (!e || e.undone) return;
+  if (!e || e.undone || e.gone) return true;
   const needle = e.ctxB + e.ins + e.ctxA;
   const order = Doc.paras.map((_, k) => k).sort((a, b) => Math.abs(a - e.i) - Math.abs(b - e.i));
   let hit = null;
   for (const k of order) { const pos = Doc.paras[k].text.indexOf(needle); if (pos >= 0) { hit = { k, pos }; break; } }
-  if (!hit) { toast("Can't undo — that text has changed since."); return; }
+  if (!hit) { toast("Can't undo — that text has changed since."); return false; }
   const from = hit.pos + e.ctxB.length;
   try {
     await applyEdit(hit.k, from, from + e.ins.length, e.del);
-    P().log[id] = { ...e, undone: true, t: now() };
-    Store.touch();
-    rerenderPara(hit.k);
-    flashPara(hit.k);
-    toast('Undone');
-    if (!$('#sheet').hidden && $('#sheet').dataset.kind === 'log') openLog();
-  } catch (err) { handleErr(err); }
+  } catch (err) {
+    if (!retried && !DEMO && err.status === 400 && /revision/i.test(err.message)) {
+      try { await Doc.load(P()); renderText(); } catch (e2) { handleErr(e2); return false; }
+      return undoEntry(id, quiet, true);   // the Doc changed elsewhere: look again in the fresh text
+    }
+    handleErr(err); return false;
+  }
+  P().log[id] = { ...e, undone: true, t: now() };
+  Store.touch();
+  rerenderPara(hit.k);
+  flashPara(hit.k);
+  if (!quiet) toast('Undone');
+  if (!$('#sheet').hidden && $('#sheet').dataset.kind === 'log') openLog();
+  return true;
 }
 
 /* ---------- manuscript pages (Drive folder: images and/or PDFs) ---------- */
@@ -956,14 +978,13 @@ function fillPara(el, i) {
     last = m.index + m[0].length;
   }
   if (last < disp.length) el.append(disp.slice(last));
-  const marks = S.marks.get(i);
-  if (marks) el.prepend(h('span', { class: 'pmark' + (marks.includes(Pages.idx) ? ' here' : ''), 'aria-hidden': 'true', title: 'Handwritten page starts here' }, 'p.' + marks.map(k => Pages.list[k].label).join(',')));
 }
 function renderText() {
   const frag = document.createDocumentFragment();
   Doc.paras.forEach((_, i) => { const el = document.createElement('p'); el.dataset.i = i; fillPara(el, i); frag.append(el); });
   textEl().replaceChildren(frag);
   buildAnchors();
+  if (Edit.active() && Edit.box) { const para = pEl(Edit.i); if (para) { para.hidden = true; para.after(Edit.box); } }
 }
 function rerenderPara(i) { const el = pEl(i); if (el) fillPara(el, i); }
 function buildAnchors() {
@@ -990,9 +1011,15 @@ function setCur(i) {
   const n = pEl(i); if (n) n.classList.add('cur');
   S.curT = now();
 }
+const motionOk = () => !matchMedia('(prefers-reduced-motion: reduce)').matches;
 function scrollToPara(i, smooth) {
   const el = pEl(i); if (!el) return;
-  $('#textPane').scrollTo({ top: Math.max(0, el.offsetTop - 14), behavior: smooth ? 'smooth' : 'auto' });
+  $('#textPane').scrollTo({ top: Math.max(0, el.offsetTop - 14), behavior: smooth && motionOk() ? 'smooth' : 'auto' });
+}
+/* The text moves on its own, a screen at a time, keeping two lines of the last screen in view. */
+function scrollText(dir) {
+  const pane = $('#textPane');
+  pane.scrollBy({ top: dir * Math.max(60, pane.clientHeight - 80), behavior: motionOk() ? 'smooth' : 'auto' });
 }
 function flashPara(i) { const el = pEl(i); if (!el) return; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
 function topVisibleIdx() {
@@ -1003,14 +1030,6 @@ function topVisibleIdx() {
   if (el && el.classList.contains('editbox')) return Edit.i;
   return el && el.dataset.i != null ? Number(el.dataset.i) : Number((kids[ans + 1] || {}).dataset?.i || 0);
 }
-function curOrTop() {
-  if (Edit.active()) return Edit.i;
-  if (S.cur >= 0) {
-    const el = pEl(S.cur), pane = $('#textPane');
-    if (el) { const top = el.offsetTop - pane.scrollTop; if (top < pane.clientHeight && top + el.offsetHeight > 0) return S.cur; }
-  }
-  return topVisibleIdx();
-}
 function offsetFromPoint(el, x, y) {
   let node = null, off = 0;
   try {
@@ -1019,91 +1038,38 @@ function offsetFromPoint(el, x, y) {
   } catch {}
   if (!node || !el.contains(node) || node.nodeType !== 3) return null;
   let total = 0;
-  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement && n.parentElement.classList.contains('pmark') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
   let n;
   while ((n = w.nextNode())) { if (n === node) return total + off; total += n.data.length; }
   return null;
 }
 
-/* ---------- page ↔ text links ---------- */
-function snipOf(i) { return (Doc.paras[i] ? Doc.paras[i].text : '').slice(0, 28); }
-function resolveLink(link) {
-  if (!link) return null;
-  const n = Doc.paras.length; if (!n) return null;
-  const i0 = clamp(link.i, 0, n - 1);
-  if (!link.snip || Doc.paras[i0].text.startsWith(link.snip)) return i0;
-  for (let d = 1; d < 400; d++) {
-    for (const k of [i0 - d, i0 + d]) if (k >= 0 && k < n && Doc.paras[k].text.startsWith(link.snip)) return k;
-  }
-  return i0;
-}
-function linkedParas() {
-  const out = [];
-  Pages.list.forEach((pg, k) => { const i = resolveLink(P().links[pg.key]); if (i != null) out.push({ k, i }); });
-  return out;
-}
-function estimateFor(k) {
-  const L = linkedParas(); if (!L.length) return null;
-  let before = null, after = null;
-  for (const e of L) { if (e.k < k) before = e; else if (e.k > k && !after) after = e; }
-  if (before && after) return Math.round(before.i + (after.i - before.i) * (k - before.k) / (after.k - before.k));
-  const per = L.length > 1 ? Math.max(1, (L[L.length - 1].i - L[0].i) / Math.max(1, L[L.length - 1].k - L[0].k)) : 5;
-  if (before) return clamp(Math.round(before.i + per * (k - before.k)), 0, Doc.paras.length - 1);
-  if (after) return clamp(Math.round(after.i - per * (after.k - k)), 0, Doc.paras.length - 1);
-  return null;
-}
-function pageForPara(i) {
-  let best = null;
-  for (const e of linkedParas()) if (e.i <= i && (!best || e.i >= best.i)) best = e;
-  return best ? best.k : null;
-}
-function updateMarks() {
-  S.marks = new Map();
-  for (const e of linkedParas()) { if (!S.marks.has(e.i)) S.marks.set(e.i, []); S.marks.get(e.i).push(e.k); }
-  textEl().querySelectorAll('.pmark').forEach(m => m.remove());
-  for (const i of S.marks.keys()) rerenderPara(i);
-}
-function linkHere() {
-  const pg = Pages.cur(); if (!pg || !Doc.paras.length) return;
-  const i = curOrTop();
-  P().links[pg.key] = { i, snip: snipOf(i), t: now() };
-  Store.touch(); updateMarks(); setCur(i); flashPara(i);
-  toast(`Page ${pg.label} starts at this paragraph`);
-  renderDrawer();
-}
-
-/* ---------- navigation ---------- */
-async function goPage(k, opts = {}) {
+/* ---------- navigation: the handwriting and the text move independently ---------- */
+async function goPage(k) {
   if (!Pages.list.length) return;
   k = clamp(k, 0, Pages.list.length - 1);
-  const prevIdx = Pages.idx;
   Pages.idx = k;
   const pg = Pages.cur();
   renderHeader();
-  $('#follow').hidden = true;
   showScan(pg);
-  if (!opts.keepText && Doc.paras.length) {
-    const link = P().links[pg.key];
-    if (link) { const i = resolveLink(link); setCur(i); scrollToPara(i, prevIdx !== k); hint(null); }
-    else {
-      const est = estimateFor(k);
-      if (est != null) { scrollToPara(est, true); hint(`Page ${pg.label} isn't linked yet — the text is scrolled to a guess. Tap the paragraph where it starts, then tap the pin.`, null, 9000); }
-      else hint(`Page ${pg.label} isn't linked to the text yet. Scroll to where it starts, tap that paragraph, then tap the pin.`, null, 9000);
-    }
-  }
-  if (S.marks.size) textEl().querySelectorAll('.pmark').forEach(m => m.classList.remove('here'));
-  for (const [i, ks] of S.marks) if (ks.includes(k)) { const m = pEl(i) && pEl(i).querySelector('.pmark'); if (m) m.classList.add('here'); }
-  const pos = { page: pg.key, para: opts.keepText ? topVisibleIdx() : (P().links[pg.key] ? resolveLink(P().links[pg.key]) : topVisibleIdx()), t: now() };
-  P().pos = pos; Store.touch();
+  P().pos = { page: pg.key, para: topVisibleIdx(), t: now() }; Store.touch();
   Resume.saveSoon();
   renderDrawer();
   const nx = Pages.list[k + 1]; if (nx) Pages.url(nx, rotOf(nx.key)).catch(() => {});
 }
+/* Where the text is scrolled to: kept with the progress so another device opens at the same
+   place. Written to Drive with the next save, or when the app goes to the background. */
+const notePos = debounce(() => {
+  const p = P(); if (!p || $('#split').hidden) return;
+  const pg = Pages.cur();
+  p.pos = { page: pg ? pg.key : null, para: topVisibleIdx(), t: now() };
+  LS.set(DEMO ? 'demoStore' : 'storeCache', Store.data);
+}, 800);
 const rotOf = key => (P() && P().rot[key] && P().rot[key].v) || 0;
 let scanToken = 0;
 async function showScan(pg) {
   const my = ++scanToken;
-  $('#fname').textContent = pg.name;
+  $('#pageChip').title = pg.name;
   const img = $('#scanImg');
   $('#scanMsg').textContent = '';
   const slow = setTimeout(() => { if (my === scanToken) $('#scanMsg').textContent = `Loading page ${pg.label}…`; }, 250);
@@ -1135,57 +1101,71 @@ function renderHeader() {
 }
 function doneNext() {
   const pg = Pages.cur(); if (!pg) return;
-  const p = P();
-  p.done[pg.key] = { v: true, t: now() };
-  const nx = Pages.list[Pages.idx + 1];
-  let autoLinked = false;
-  if (nx && !p.links[nx.key] && Doc.paras.length) {
-    const i = curOrTop();
-    p.links[nx.key] = { i, snip: snipOf(i), t: now(), auto: true };
-    autoLinked = true;
-  }
+  P().done[pg.key] = { v: true, t: now() };
   Store.touch();
-  if (autoLinked) updateMarks();
-  if (nx) {
-    goPage(Pages.idx + 1).then(() => { if (autoLinked) hint(`Page ${nx.label} linked to this paragraph. If it starts elsewhere, tap the right paragraph and press the pin.`, null, 8000); });
-  } else { renderHeader(); renderDrawer(); toast('That was the last page. Every checked page shows in the page list.'); }
+  if (Pages.list[Pages.idx + 1]) goPage(Pages.idx + 1);
+  else { renderHeader(); renderDrawer(); toast('That was the last page. Every checked page shows in the page list.'); }
 }
 function toggleDone(key) {
   const p = P(); const was = !!(p.done[key] && p.done[key].v);
   p.done[key] = { v: !was, t: now() }; Store.touch(); renderHeader(); renderDrawer();
 }
 
-/* ---------- editing a paragraph ---------- */
+/* ---------- editing a paragraph: every fix saves by itself ---------- */
+const SAVE_AFTER = 1200;   // ms after the last keystroke
+function readOnlyNote() {
+  const who = LS.get('email', '');
+  banner('warn', `${who || 'This Google account'} can only view this Google Doc, so fixes can’t be saved. Give it edit access (in the Doc: Share → add ${who || 'this account'} as Editor), or sign out and sign in with the account that owns the Doc.`,
+    { label: 'Check again', fn: () => reloadDoc() });
+}
 const Edit = {
-  i: -1, orig: '', ta: null, box: null, busy: false,
+  i: -1, orig: '', base: '', entryId: null, region: null, ids: [], ta: null, box: null,
+  chain: Promise.resolve(true), inflight: false, timer: 0, retryT: 0, failed: '', composing: false, unsure: null,
+  want: null, switching: false,
   active() { return this.i >= 0; },
-  dirty() { return this.ta && this.ta.value.replace(/\r?\n/g, '\u000b') !== this.orig; },
-  start(i, caret, value) {
+  value() { return this.ta ? this.ta.value.replace(/\r?\n/g, '\u000b') : ''; },
+  dirty() { return !!this.ta && this.value() !== this.orig; },
+  /* Open paragraph i for typing. A paragraph that was open is saved and closed first. */
+  async start(i, caret, value) {
     if (this.i === i) return;
-    if (this.active()) { if (this.dirty()) { toast('Save or cancel the paragraph you are fixing first.'); this.ta.focus(); return; } this.close(); }
     const p = Doc.paras[i]; if (!p) return;
     if (p.locked) { toast('This paragraph holds an image, table of contents or special element. Edit it in Google Docs.'); return; }
+    if (!Doc.canEdit) { readOnlyNote(); return; }
+    this.want = { i, caret, value };
+    if (this.switching) return;   // the switch under way opens the latest paragraph asked for
+    this.switching = true;
+    try {
+      while (this.want) {
+        const w = this.want; this.want = null;
+        if (this.i === w.i) continue;
+        if (this.active() && !(await this.close())) { this.want = null; return; }
+        this.open(w.i, w.caret, w.value);
+      }
+    } finally { this.switching = false; }
+  },
+  open(i, caret, value) {
+    const p = Doc.paras[i], para = pEl(i); if (!p || !para) return;
     setCur(i);
-    const para = pEl(i);
-    const ta = h('textarea', { id: 'editTa', class: 'edit-ta', lang: 'gu', rows: '1', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', spellcheck: 'false', enterkeyhint: 'done', 'aria-label': 'Fix this paragraph' });
+    const ta = h('textarea', { id: 'editTa', class: 'edit-ta', lang: 'gu', rows: '1', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', spellcheck: 'false', enterkeyhint: 'done', 'aria-label': 'Fix this paragraph. It saves by itself.' });
     ta.value = value != null ? value : p.text.replace(/\u000b/g, '\n');
     const gu = h('button', { class: 'btn small ghost gu-toggle', 'aria-pressed': String(Translit.on), title: 'Type Gujarati with English letters (bruh → બૃહ)', onpointerdown: e => e.preventDefault(), onclick: () => { Translit.set(!Translit.on); gu.setAttribute('aria-pressed', String(Translit.on)); gu.textContent = Translit.on ? 'ગુ on' : 'ગુ off'; Translit.clear(); } }, Translit.on ? 'ગુ on' : 'ગુ off');
     const chips = h('div', { class: 'chips', id: 'chips' });
+    const state = h('span', { class: 'edit-state', id: 'editState', role: 'status' });
     const msg = h('div', { class: 'edit-msg', id: 'editMsg' });
-    const save = h('button', { class: 'btn small primary', id: 'btnSave', onpointerdown: e => e.preventDefault(), onclick: () => this.save() }, 'Save');
-    const cancel = h('button', { class: 'btn small', onpointerdown: e => e.preventDefault(), onclick: () => this.cancel() }, 'Cancel');
-    const bar = h('div', { class: 'editbar' }, gu, h('span', { class: 'spacer' }), cancel, save);
-    const box = h('div', { class: 'editbox' }, ta, chips, bar, msg);
+    const box = h('div', { class: 'editbox' }, ta, chips, h('div', { class: 'editbar' }, gu, h('span', { class: 'spacer' }), state), msg);
     para.hidden = true; para.after(box);
-    this.i = i; this.orig = p.text; this.ta = ta; this.box = box;
+    Object.assign(this, { i, orig: p.text, base: p.text, entryId: null, region: null, ids: [], ta, box, failed: '', composing: false, unsure: null });
     const size = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; };
-    ta.addEventListener('input', e => { size(); Translit.onInput(e); Resume.saveSoon(); });
+    ta.addEventListener('input', e => { size(); Translit.onInput(e); Resume.saveSoon(); this.schedule(); });
+    ta.addEventListener('compositionstart', () => { this.composing = true; });
+    ta.addEventListener('compositionend', () => { this.composing = false; this.schedule(); });
+    ta.addEventListener('blur', () => { if (this.ta === ta) this.flush(); });
     ta.addEventListener('keydown', e => {
       this.shiftEnter = e.key === 'Enter' && e.shiftKey;
-      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); if (Translit.acceptTop()) return; this.save(); }
-      else if (e.key === 'Escape') { e.preventDefault(); if (Translit.visible()) Translit.clear(); else this.cancel(); }
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); if (Translit.acceptTop()) return; this.close(); }
+      else if (e.key === 'Escape') { e.preventDefault(); if (Translit.visible()) Translit.clear(); else this.close(); }
     });
-    ta.addEventListener('beforeinput', e => { if ((e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') && !this.shiftEnter) { e.preventDefault(); this.save(); } });
+    ta.addEventListener('beforeinput', e => { if ((e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') && !this.shiftEnter) { e.preventDefault(); this.close(); } });
     size();
     ta.focus({ preventScroll: true });
     const c = clamp(caret != null ? caret : ta.value.length, 0, ta.value.length);
@@ -1194,39 +1174,134 @@ const Edit = {
     const top = box.offsetTop - pane.scrollTop;
     if (top < 0 || top + box.offsetHeight > pane.clientHeight - 20) pane.scrollTo({ top: Math.max(0, box.offsetTop - 60) });
     if (!DEMO && !Translit.on && !LS.get('seenKbTip', false)) { msg.className = 'edit-msg note'; msg.textContent = 'Tip: use your Gujarati keyboard, or turn on “ગુ” to type Gujarati with English letters.'; LS.set('seenKbTip', true); }
+    if (this.dirty()) this.schedule();   // a fix brought back after signing in again
   },
-  async save() {
-    if (this.busy || !this.active()) return;
-    Translit.clear();
-    const i = this.i, oldText = this.orig;
-    const newText = this.ta.value.replace(/\r?\n/g, '\u000b');
-    if (newText === oldText) { this.close(); return; }
-    this.busy = true;
-    const btn = $('#btnSave'); if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+  /* Save a moment after typing stops. */
+  schedule() {
+    clearTimeout(this.timer);
+    if (!this.dirty()) return;
+    this.setState('');
+    this.timer = setTimeout(() => this.flush(), SAVE_AFTER);
+  },
+  /* Not yet: a word is still being composed, or English letters are waiting to become Gujarati (ગુ). */
+  waiting() {
+    if (this.composing) return true;
+    const ta = this.ta;
+    return !!(ta && Translit.on && !Translit.broken && /[A-Za-z]$/.test(ta.value.slice(0, ta.selectionStart)));
+  },
+  /* Saves run one after another, so each is worked out from the Doc as the last one left it. */
+  flush(force) {
+    clearTimeout(this.timer);
+    if (!this.active()) return Promise.resolve(true);
+    if (!force && this.waiting()) return Promise.resolve(true);
+    const run = () => this.saveNow();
+    this.chain = this.chain.then(run, run);
+    return this.chain;
+  },
+  async saveNow() {
+    if (!this.active()) return true;
+    clearTimeout(this.retryT);
+    this.inflight = true; syncState();
     try {
-      const { entry, reloaded } = await commitChange(i, oldText, newText);
-      this.close();
-      if (reloaded) { renderText(); updateMarks(); }
-      rerenderPara(entry.i); setCur(entry.i);
-      toast(DEMO ? 'Fixed (demo: not sent to Google)' : 'Saved to the Google Doc', { label: 'Undo', fn: () => undoEntry(entry.id) });
+      if (this.unsure) await this.recheck();
+      const oldText = this.orig, newText = this.value();
+      if (newText === oldText) { this.failed = ''; this.setState(this.ids.length ? 'saved' : 'clear'); return true; }
+      this.setState('saving');
+      this.unsure = { oldText, newText };   // until Google answers, the fix may or may not be in the Doc
+      let r;
+      try { r = await pushEdit(this.i, oldText, newText); }
+      catch (e) { if (!(e.offline || e.status >= 500)) this.unsure = null; throw e; }
+      this.unsure = null;
+      if (r.reloaded || r.i !== this.i) { this.i = r.i; renderText(); }
+      this.orig = newText; this.failed = '';
+      this.logSession(oldText);
+      this.setState('saved');
+      Resume.saveSoon();
+      return true;
     } catch (e) {
-      const m = $('#editMsg');
-      if (e instanceof AuthError) { Resume.save(); showReauth(); if (m) { m.className = 'edit-msg'; m.textContent = 'Not saved yet. Sign in again — your fix is kept — then tap Save.'; } }
-      else if (m) { m.className = 'edit-msg'; m.textContent = 'Not saved. ' + (e.message || e); }
-    } finally {
-      this.busy = false;
-      const b2 = $('#btnSave'); if (b2) { b2.disabled = false; b2.textContent = 'Save'; }
-    }
+      if (e.conflict) { this.teardown(); renderText(); banner('warn', e.message); return false; }
+      this.failed = e.message || String(e);
+      if (e instanceof AuthError) { Resume.save(); showReauth(); this.setState('error', 'Not saved yet — sign in again. What you typed is kept.'); }
+      else if (e.status === 403) { Doc.canEdit = false; readOnlyNote(); this.setState('error', 'Not saved — this Google account can only view the Doc.'); }
+      else if (e.keep || (e.status && e.status < 500 && e.status !== 429)) this.setState('error', 'Not saved — ' + this.failed);
+      else { this.setState('error', 'Not saved yet — ' + this.failed + ' Trying again…'); this.retryT = setTimeout(() => this.flush(), 8000); }
+      return false;
+    } finally { this.inflight = false; syncState(); }
   },
-  cancel() { this.close(); },
-  close() {
-    if (!this.active()) return;
-    const para = pEl(this.i);
-    if (this.box) this.box.remove();
-    if (para) para.hidden = false;
-    this.i = -1; this.ta = null; this.box = null; this.orig = '';
+  /* A save got no answer. Look at the Doc to see whether it went in before trying again,
+     so a fix is never typed into the Doc twice. */
+  async recheck() {
+    const u = this.unsure;
+    await Doc.load(P());
+    let j = findPara(u.newText, this.i);
+    if (j >= 0) { this.i = j; this.orig = u.newText; this.logSession(u.oldText); }
+    else {
+      j = findPara(u.oldText, this.i);
+      if (j < 0) throw Object.assign(new Error('This paragraph was changed in Google Docs while you were fixing it, so your fix was not saved. The text is reloaded — please redo the fix.'), { conflict: true });
+      this.i = j;
+    }
+    this.unsure = null;
+    renderText();
+  },
+  /* Corrections made: one entry per spot fixed, kept up to date while you type there. Typing
+     somewhere else in the paragraph starts a new entry. prev is the text before this save. */
+  logSession(prev) {
+    const p = P();
+    if (this.entryId && this.region) {
+      const d = diffRange(prev, this.orig);
+      if (d.from > this.region[1] + 12 || d.to < this.region[0] - 12) this.entryId = null;
+    }
+    if (!this.entryId) this.base = prev;
+    const d = diffRange(this.base, this.orig);
+    const old = this.entryId && p.log[this.entryId];
+    if (!d.del && !d.ins) {   // typed back to how it was
+      if (old) p.log[old.id] = { ...old, gone: true, t: now() };
+      this.entryId = null; this.region = null;
+      Store.touch(); return;
+    }
+    this.region = [d.from, d.from + d.ins.length];
+    const pg = Pages.cur();
+    const id = this.entryId || (this.entryId = uid());
+    if (!this.ids.includes(id)) this.ids.push(id);
+    p.log[id] = {
+      id, t: now(), page: old ? old.page : (pg ? pg.key : null), pageLabel: old ? old.pageLabel : (pg ? pg.label : ''), i: this.i,
+      ctxB: this.base.slice(Math.max(0, d.from - 16), d.from), del: d.del, ins: d.ins, ctxA: this.base.slice(d.to, d.to + 16), undone: false,
+    };
+    S.fixed.add(this.i);
+    Store.touch();
+  },
+  setState(kind, text) {
+    const el = $('#editState'); if (!el) return;
+    el.className = 'edit-state' + (kind === 'saved' ? ' ok' : kind === 'error' ? ' err' : '');
+    el.textContent = kind === 'error' ? 'Not saved' : ({ saving: 'Saving…', saved: DEMO ? 'Saved (demo)' : 'Saved ✓' }[kind] || '');
+    const m = $('#editMsg'); if (!m) return;
+    if (kind === 'error') { m.className = 'edit-msg'; m.textContent = text || ''; }
+    else if (kind && !m.classList.contains('note')) m.textContent = '';
+  },
+  /* Save what is left, then close. Stays open (and says why) if it can't be saved. */
+  async close() {
+    if (!this.active()) return true;
+    for (let n = 0; n < 4; n++) {
+      await this.chain;   // let a save that is under way finish first
+      if (!this.active()) return false;   // closed by a conflict while saving
+      if (!this.dirty()) break;
+      if (!(await this.flush(true))) { if (this.ta) this.ta.focus({ preventScroll: true }); return false; }
+    }
+    if (!this.active() || this.dirty()) return false;
+    const ids = this.ids.filter(id => P().log[id] && !P().log[id].gone);
+    this.teardown();
+    if (ids.length) toast(DEMO ? 'Fixed (demo: not sent to Google)' : 'Saved in the Google Doc', { label: 'Undo', fn: () => undoEntries(ids) });
+    return true;
+  },
+  teardown() {
+    clearTimeout(this.timer); clearTimeout(this.retryT);
+    const i = this.i, box = this.box;
+    Object.assign(this, { i: -1, ta: null, box: null, orig: '', base: '', entryId: null, region: null, ids: [], failed: '', composing: false, unsure: null });
+    if (box) box.remove();
+    const para = pEl(i); if (para) { para.hidden = false; rerenderPara(i); }
     Translit.clear();
     Resume.saveSoon();
+    syncState();
   },
 };
 
@@ -1302,18 +1377,16 @@ function renderDrawer() {
   const p = P(); if (!p) return;
   const total = Pages.list.length;
   const done = Pages.list.filter(pg => p.done[pg.key] && p.done[pg.key].v).length;
-  const links = Pages.list.filter(pg => p.links[pg.key]).length;
   const rows = Pages.list.map((pg, k) => {
     const isDone = !!(p.done[pg.key] && p.done[pg.key].v);
     const ck = h('button', { class: 'ck', role: 'checkbox', 'aria-checked': String(isDone), 'aria-label': `Page ${pg.label} checked`, html: isDone ? icon('check') : '', onclick: e => { e.stopPropagation(); toggleDone(pg.key); } });
     return h('div', { class: 'prow' + (k === Pages.idx ? ' on' : ''), role: 'button', tabindex: '0', onclick: () => { closeDrawer(); goPage(k); }, onkeydown: e => { if (e.key === 'Enter') { closeDrawer(); goPage(k); } } },
-      ck, h('span', { class: 'lab' }, 'p. ' + pg.label), h('span', { class: 'nm' }, pg.name),
-      h('span', { class: 'st' }, p.links[pg.key] ? h('span', { class: 'pin', title: 'Linked to text', html: icon('pin') }) : ''));
+      ck, h('span', { class: 'lab' }, 'p. ' + pg.label), h('span', { class: 'nm' }, pg.name));
   });
   const books = liveProjects().map(b => h('button', { class: 'brow' + (b.id === p.id ? ' on' : ''), onclick: () => { closeDrawer(); if (b.id !== p.id) openProject(b.id); } }, h('span', { html: icon('book') }), b.name));
   d.replaceChildren(
     h('header', {}, h('h2', {}, p.name), h('button', { class: 'ib', 'aria-label': 'Close', html: icon('x'), onclick: closeDrawer })),
-    h('div', { class: 'prog' }, h('span', {}, `${done} of ${total} pages checked · ${links} linked to the text`), h('div', { class: 'track' }, h('div', { class: 'fill', style: `width:${total ? (done / total * 100).toFixed(1) : 0}%` }))),
+    h('div', { class: 'prog' }, h('span', {}, `${done} of ${total} handwritten pages checked`), h('div', { class: 'track' }, h('div', { class: 'fill', style: `width:${total ? (done / total * 100).toFixed(1) : 0}%` }))),
     h('div', { class: 'plist' }, rows),
     h('div', { class: 'books' }, books, DEMO ? '' : h('button', { class: 'brow', onclick: () => { closeDrawer(); openBookForm(); } }, h('span', { html: icon('plus') }), 'Add another book')),
   );
@@ -1332,7 +1405,7 @@ function openSheet(kind, title, ...body) {
 }
 function closeSheet() { $('#sheet').hidden = true; if ($('#drawer').hidden) $('#scrim').hidden = true; }
 function openMenu() {
-  const p = P(); const n = p ? Object.values(p.log).filter(e => !e.undone).length : 0;
+  const p = P(); const n = p ? Object.values(p.log).filter(e => !e.undone && !e.gone).length : 0;
   const mi = (ic, label, fn, extra) => h('button', { class: 'mi', onclick: () => { closeSheet(); fn(); } }, h('span', { html: icon(ic) }), label, extra ? h('small', {}, extra) : '');
   openSheet('menu', 'Melvani',
     mi('search', 'Find verse or text', openGoto),
@@ -1373,14 +1446,10 @@ function openGoto() {
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') { const b = out.querySelector('.res'); if (b) b.click(); } });
   openSheet('goto', 'Find verse or text', inp, h('p', { class: 'muted' }, 'Type a verse like ૧/૧૧ (or 1/11), a page like p 12, or any word from the text.'), out);
 }
-function jumpToPara(i) {
-  setCur(i); scrollToPara(i, true); flashPara(i);
-  const k = pageForPara(i);
-  if (k != null && k !== Pages.idx) goPage(k, { keepText: true });
-}
+function jumpToPara(i) { setCur(i); scrollToPara(i, true); flashPara(i); }
 function openLog() {
   const p = P();
-  const entries = Object.values(p.log).sort((a, b) => b.t - a.t);
+  const entries = Object.values(p.log).filter(e => !e.gone).sort((a, b) => b.t - a.t);
   const fmt = t => new Date(t).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' });
   const list = entries.map(e => h('div', { class: 'logrow' + (e.undone ? ' undone' : '') },
     h('span', { class: 'meta' }, `p. ${e.pageLabel || '–'} · ${fmt(e.t)}${e.undone ? ' · undone' : ''}`),
@@ -1396,7 +1465,7 @@ function openLog() {
   } }, 'Download CSV');
   openSheet('log', `Corrections made (${entries.filter(e => !e.undone).length})`,
     entries.length ? h('div', { class: 'row' }, copy, csv) : '',
-    entries.length ? h('div', {}, list) : h('p', { class: 'muted' }, 'No corrections yet. Tap a paragraph, tap it again to edit, fix the word, and press Save.'));
+    entries.length ? h('div', {}, list) : h('p', { class: 'muted' }, 'No corrections yet. Tap the text where the mistake is and fix it — it saves by itself.'));
 }
 function openLayout() {
   const fs = h('input', { type: 'range', id: 'fsRange', min: '14', max: '32', step: '1', value: String(LS.get('fs', 20)) });
@@ -1412,34 +1481,38 @@ function openLayout() {
 }
 function openHelp() {
   const row = (k, v) => [h('span', {}, k), h('span', {}, v)];
+  const kb = (...keys) => h('span', {}, ...keys.flatMap((k, n) => [n ? ' ' : '', h('span', { class: 'kbd' }, k)]));
   openSheet('help', 'How to use Melvani',
-    h('p', {}, 'The handwritten page and the typed text sit together. Read a stretch of handwriting, compare the text, fix what differs, then press Page done to move to the next page.'),
+    h('p', {}, 'The handwritten page and the typed text sit side by side, and each side moves on its own. Turn the handwritten pages with the arrows under the handwriting. Move through the text by scrolling, or with the arrows at the bottom of the text.'),
     h('h3', {}, 'Fixing a word'),
-    h('p', {}, 'Tap a paragraph to select it. Tap it again where the mistake is — it opens for editing with the cursor there. Fix it and press Save (or Enter). The change goes straight into the Google Doc; formatting is kept. Undo is in the message that appears and in Corrections made.'),
-    h('h3', {}, 'Keeping both sides together'),
-    h('p', {}, 'Each handwritten page is linked to the paragraph where it starts (the rose p. label in the margin). Page done links the next page to where you are in the text; the pin sets it by hand. Turning pages then jumps the text, and finding a verse like ૧/૧૧ turns to its page.'),
+    h('p', {}, 'Tap the text where the mistake is — it opens for typing with the cursor there. Fix it and carry on: the change goes into the Google Doc by itself a moment after you stop typing, with its formatting kept. There is no Save button. Enter, or tapping another paragraph, closes the paragraph. Undo is in the message that appears and in Corrections made.'),
+    h('h3', {}, 'Checking pages'),
+    h('p', {}, 'Page done ticks off the handwritten page and turns to the next one. The ticks show in the page list (☰).'),
     h('h3', {}, 'On the handwriting'),
     h('div', { class: 'helpgrid' }, ...row('Pinch or ⌘/Ctrl + scroll', 'Zoom'), ...row('Drag', 'Move around the page'), ...row('Double-tap', 'Zoom in / back to full width'), ...row('Ruler button', 'A band that marks the line you are reading; drag it, or drag its handle to resize')),
     h('h3', {}, 'Keyboard (Mac)'),
     h('div', { class: 'helpgrid' },
-      ...row(h('span', {}, h('span', { class: 'kbd' }, '←'), ' ', h('span', { class: 'kbd' }, '→')), 'Previous / next page'),
-      ...row(h('span', {}, h('span', { class: 'kbd' }, '↑'), ' ', h('span', { class: 'kbd' }, '↓')), 'Move the ruler one line'),
-      ...row(h('span', { class: 'kbd' }, 'E'), 'Edit the selected paragraph'),
-      ...row(h('span', { class: 'kbd' }, 'D'), 'Page done, go to next'),
-      ...row(h('span', { class: 'kbd' }, 'P'), 'Page starts at selected paragraph'),
-      ...row(h('span', { class: 'kbd' }, '/'), 'Find verse or text'),
-      ...row(h('span', { class: 'kbd' }, 'R'), 'Ruler on / off'),
-      ...row(h('span', {}, h('span', { class: 'kbd' }, '+'), ' ', h('span', { class: 'kbd' }, '−'), ' ', h('span', { class: 'kbd' }, '0')), 'Zoom in, out, fit'),
-      ...row(h('span', { class: 'kbd' }, 'Esc'), 'Cancel editing')),
+      ...row(kb('←', '→'), 'Previous / next handwritten page'),
+      ...row(kb('Page Up', 'Page Down'), 'Text up / down one screen (also Space and Shift+Space)'),
+      ...row(kb('↑', '↓'), 'Move the ruler one line'),
+      ...row(kb('E'), 'Type in the paragraph at the top of the text'),
+      ...row(kb('Enter'), 'Close the paragraph you are typing in (it is already saved)'),
+      ...row(kb('D'), 'Page done, turn to the next handwritten page'),
+      ...row(kb('/'), 'Find verse or text'),
+      ...row(kb('R'), 'Ruler on / off'),
+      ...row(kb('+', '−', '0'), 'Zoom in, out, fit')),
     h('h3', {}, 'Typing Gujarati'),
-    h('p', {}, 'Use the Gujarati keyboard on the phone or iPad (Gboard can turn English letters into Gujarati). While editing, the ગુ button does the same inside Melvani: type bruh and pick બૃહ.'));
+    h('p', {}, 'Use the Gujarati keyboard on the phone or iPad (Gboard can turn English letters into Gujarati). While typing in a paragraph, the ગુ button does the same inside Melvani: type bruh and pick બૃહ.'));
 }
 async function reloadDoc() {
-  if (Edit.active()) Edit.close();
-  try { await Doc.load(P()); renderText(); updateMarks(); toast('Text reloaded from Google Docs'); }
-  catch (e) { handleErr(e); }
+  if (Edit.active() && !(await Edit.close())) return;
+  try {
+    await Doc.load(P()); renderText();
+    if (Doc.canEdit) { if ($('#banner').classList.contains('warn')) banner(null); toast('Text reloaded from Google Docs'); }
+    else readOnlyNote();
+  } catch (e) { handleErr(e); }
 }
-function refreshAfterPull() { if (!P()) { return; } renderHeader(); updateMarks(); renderDrawer(); }
+function refreshAfterPull() { if (!P()) { return; } renderHeader(); renderDrawer(); }
 
 /* ---------- books (Google Doc + Drive folder) ---------- */
 function parseDocLink(s) {
@@ -1520,7 +1593,7 @@ function showWelcome(kind, msg) {
   w.replaceChildren(card);
 }
 async function openProject(id) {
-  if (Edit.active()) Edit.close();
+  if (Edit.active() && !(await Edit.close())) { toast('The paragraph you were fixing is not saved yet. Try again in a moment.'); return; }
   S.projId = id; S.cur = -1; S.fixed = new Set();
   LS.set('lastProj', id);
   const p = P();
@@ -1531,19 +1604,21 @@ async function openProject(id) {
     showWelcome('error', e.message || String(e)); return;
   }
   showWork(true);
-  renderText(); updateMarks();
+  renderText();
+  banner(null);
   const r = LS.get(Resume.key(), null);
   let page = 0, top = null, cur = null, draft = null;
   if (r && r.proj === id && (!p.pos || r.t >= p.pos.t)) { page = Math.max(0, Pages.indexOf(r.page)); top = r.top; cur = r.cur; draft = r.draft; }
   else if (p.pos) { page = Math.max(0, Pages.indexOf(p.pos.page)); top = p.pos.para; }
-  await goPage(page, { keepText: top != null });
-  if (top != null) scrollToPara(clamp(top, 0, Doc.paras.length - 1));
+  if (top != null && Doc.paras.length) scrollToPara(clamp(top, 0, Doc.paras.length - 1));
   if (cur != null && cur >= 0 && cur < Doc.paras.length) setCur(cur);
-  if (draft) {
+  await goPage(page);
+  if (!Doc.canEdit) readOnlyNote();
+  else if (draft) {
     const i = findPara(draft.orig, draft.i);
-    if (i >= 0 && draft.value !== draft.orig.replace(/\u000b/g, '\n')) { Edit.start(i, draft.sel, draft.value); banner('info', 'Your unsaved fix is back. Check it and press Save.'); }
+    if (i >= 0 && draft.value !== draft.orig.replace(/\u000b/g, '\n')) { await Edit.start(i, draft.sel, draft.value); toast('The fix you were typing is back, and is being saved.'); }
   }
-  if (DEMO) banner('demo', 'Demo with your notebook pages 10–11 and a few paragraphs of the Doc. Try it: find (બ્રહ્મદારણ્યક), tap it twice, and fix it to (બૃહદારણ્યક). Nothing is sent to Google.');
+  if (DEMO) banner('demo', 'Demo with your notebook pages 10–11 and a few paragraphs of the Doc. Try it: find (બ્રહ્મદારણ્યક), tap it and fix it to (બૃહદારણ્યક) — it saves by itself. Nothing is sent to Google.');
 }
 
 /* ---------- demo content ---------- */
@@ -1585,14 +1660,16 @@ const sideBySide = () => matchMedia('(orientation: landscape) and (min-width: 72
 function wire() {
   const set = (id, ic) => { $(id).innerHTML = icon(ic); };
   set('#btnMenu', 'menu'); set('#btnPrev', 'left'); set('#btnNext', 'right'); set('#btnGoto', 'search');
-  set('#btnLink', 'pin'); set('#btnMore', 'more'); set('#zOut', 'zout'); set('#zFit', 'fit'); set('#zIn', 'zin');
+  set('#tUp', 'up'); set('#tDown', 'down');
+  set('#btnMore', 'more'); set('#zOut', 'zout'); set('#zFit', 'fit'); set('#zIn', 'zin');
   set('#btnRuler', 'ruler'); set('#btnRotate', 'rotate'); $('#doneIcon').innerHTML = icon('check');
   $('#btnMenu').onclick = openDrawer;
   $('#pageChip').onclick = openDrawer;
   $('#btnPrev').onclick = () => goPage(Pages.idx - 1);
   $('#btnNext').onclick = () => goPage(Pages.idx + 1);
   $('#btnGoto').onclick = openGoto;
-  $('#btnLink').onclick = linkHere;
+  $('#tUp').onclick = () => scrollText(-1);
+  $('#tDown').onclick = () => scrollText(1);
   $('#btnDone').onclick = doneNext;
   $('#btnMore').onclick = openMenu;
   $('#zIn').onclick = () => View.zoomCenter(1.25);
@@ -1603,31 +1680,16 @@ function wire() {
   $('#scrim').onclick = () => { closeSheet(); closeDrawer(); };
 
   const text = textEl();
+  // One tap opens the paragraph for typing, with the cursor where you tapped.
   text.addEventListener('click', e => {
     if (e.target.closest('.editbox')) return;
     const el = e.target.closest('p[data-i]'); if (!el) return;
-    const i = Number(el.dataset.i);
-    if (S.cur === i && !Edit.active()) Edit.start(i, offsetFromPoint(el, e.clientX, e.clientY));
-    else if (S.cur === i && Edit.active() && Edit.i !== i) Edit.start(i, offsetFromPoint(el, e.clientX, e.clientY));
-    else setCur(i);
+    const sel = window.getSelection && window.getSelection();
+    if (sel && !sel.isCollapsed && String(sel).trim()) return;   // selecting words to copy
+    Edit.start(Number(el.dataset.i), offsetFromPoint(el, e.clientX, e.clientY));
   });
 
-  const pane = $('#textPane');
-  let raf = 0;
-  pane.addEventListener('scroll', () => {
-    Resume.saveSoon();
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      raf = 0;
-      const k = pageForPara(topVisibleIdx());
-      const f = $('#follow');
-      if (k != null && k !== Pages.idx) {
-        const pg = Pages.list[k];
-        f.replaceChildren(h('span', {}, `The text here is page ${pg.label}`), h('button', { class: 'btn small primary', onclick: () => goPage(k, { keepText: true }) }, 'Show it'));
-        f.hidden = false;
-      } else f.hidden = true;
-    });
-  }, { passive: true });
+  $('#textPane').addEventListener('scroll', () => { Resume.saveSoon(); notePos(); }, { passive: true });
 
   const div = $('#divider');
   div.addEventListener('pointerdown', e => {
@@ -1659,9 +1721,10 @@ function wire() {
     else if (k === 'ArrowLeft') { goPage(Pages.idx - 1); e.preventDefault(); }
     else if (k === 'ArrowDown') { Ruler.step(1); e.preventDefault(); }
     else if (k === 'ArrowUp') { Ruler.step(-1); e.preventDefault(); }
-    else if (k === 'e' || k === 'Enter') { if (S.cur >= 0) { Edit.start(S.cur); e.preventDefault(); } }
+    else if (k === 'PageDown' || (k === ' ' && !e.shiftKey)) { scrollText(1); e.preventDefault(); }
+    else if (k === 'PageUp' || (k === ' ' && e.shiftKey)) { scrollText(-1); e.preventDefault(); }
+    else if (k === 'e' || k === 'Enter') { if (Doc.paras.length) { Edit.start(topVisibleIdx()); e.preventDefault(); } }
     else if (k === 'd') doneNext();
-    else if (k === 'p') linkHere();
     else if (k === '/') { openGoto(); e.preventDefault(); }
     else if (k === 'r') Ruler.toggle();
     else if (k === '+' || k === '=') View.zoomCenter(1.25);
@@ -1670,9 +1733,14 @@ function wire() {
   });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') Store.pull();
-    else { Resume.save(); if (!DEMO && Auth.valid()) Store.flush(); }
+    else { Resume.save(); Edit.flush(); if (!DEMO && Auth.valid()) Store.flush(); }
   });
   addEventListener('pagehide', () => Resume.save());
+  addEventListener('beforeunload', e => {
+    if (Auth.leaving || !(Edit.dirty() || Edit.inflight)) return;
+    Resume.save(); Edit.flush(true);
+    e.preventDefault(); e.returnValue = '';
+  });
 }
 
 async function boot() {

@@ -1,6 +1,6 @@
 // Melvani service worker: makes the app installable and quick to open.
 // Only the app's own files are cached. Google data (Docs, Drive, sign-in) is never cached.
-const VERSION = 'melvani-v2';
+const VERSION = 'melvani-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -22,9 +22,9 @@ self.addEventListener('fetch', e => {
   // Pages: network first so updates arrive; fall back to the cached copy offline.
   if (req.mode === 'navigate' || url.pathname.endsWith('.html')) {
     e.respondWith(
-      fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(VERSION).then(c => c.put('./index.html', copy));
+      // no-cache: check with the server every time (cheap), so a new version shows on the next open
+      fetch(new Request(req, { cache: 'no-cache' })).then(res => {
+        if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put('./index.html', copy)); }
         return res;
       }).catch(() => caches.match('./index.html'))
     );

@@ -2,7 +2,7 @@
 
 Proofread handwritten pages against the typed Google Doc — on the Samsung phone, the iPad and the MacBook.
 
-The scanned page and the typed text sit together on one screen. Tap a paragraph, tap it again where the mistake is, fix it, press **Save**: the change goes straight into the Google Doc with its formatting kept. Each handwritten page is linked to the paragraph where it starts, so turning a page moves the text with it. Progress (checked pages, page links, the list of corrections) is saved in a private app folder in your Google Drive, so all three devices stay in step.
+The scanned page and the typed text sit together on one screen, and each side moves on its own: the handwriting has its own page arrows, the text its own up/down arrows. Tap the text where the mistake is and fix it — the change goes into the Google Doc by itself a moment after you stop typing, with its formatting kept. There is no Save button. Progress (checked pages, where you are, the list of corrections) is saved in a private app folder in your Google Drive, so all three devices stay in step.
 
 Until the setup below is done, the app runs as a **demo** with notebook pages 10–11 and a few paragraphs of *Yatharth Geeta Sar · Book 1*.
 
@@ -67,27 +67,29 @@ The first sign-in shows *"Google hasn't verified this app"*. It's your own copy:
 
 | | |
 |---|---|
-| **Fix a word** | Tap the paragraph, tap again at the mistake, fix it, press **Save** (or Enter). **Shift+Enter** adds a line break inside the paragraph. |
-| **Undo** | In the message after saving, or in **⋯ → Corrections made**. |
-| **Finish a page** | **Page done** marks it checked, goes to the next page, and links that page to where you are in the text. |
-| **Fix a page link** | Tap the paragraph where the page really starts, then the **pin**. The rose *p.* label in the margin shows where each page begins. |
-| **Find** | **⋯ → Find**, or `/` on the Mac: a verse (`૧/૧૧` or `1/11`), a page (`p 12`), or any words. Finding a verse also turns to its page. |
+| **Fix a word** | Tap the text at the mistake and type. It saves by itself about a second after you stop typing ("Saved ✓" under the paragraph). Enter, or tapping another paragraph, closes it. **Shift+Enter** adds a line break inside the paragraph. |
+| **Undo** | In the message after closing the paragraph, or in **⋯ → Corrections made**. |
+| **Turn the handwriting** | The ‹ › arrows under the handwritten page (or `←` `→` on the Mac). The text stays where it is. |
+| **Move through the text** | Scroll, or the ▲ ▼ arrows at the bottom right of the text (Page Up / Page Down on the Mac). The handwriting stays where it is. |
+| **Finish a page** | **Page done** ticks off the handwritten page and turns to the next one. |
+| **Find** | **⋯ → Find**, or `/` on the Mac: a verse (`૧/૧૧` or `1/11`) or any words moves the text there; a page (`p 12`) turns the handwriting there. |
 | **Handwriting** | Pinch or ⌘+scroll to zoom, drag to move, double-tap to zoom in or back. The **ruler** dims all but the line you're reading; `↑`/`↓` move it one line on the Mac. |
 | **Gujarati typing** | Use the Gujarati keyboard on the phone and iPad (Gboard can turn English letters into Gujarati). While editing, the **ગુ** button does the same inside Melvani: type `bruh`, pick `બૃહ`. |
 
-Mac keys: `←` `→` pages · `E` edit · `D` page done · `P` pin · `R` ruler · `+` `−` `0` zoom · `Esc` cancel.
+Mac keys: `←` `→` handwritten pages · `Page Up` `Page Down` (or Space) text · `E` type in the top paragraph · `Enter`/`Esc` close the paragraph · `D` page done · `R` ruler · `+` `−` `0` zoom.
 
 ## What it keeps, and where
 
-- **Your Doc**: each Save sends only the changed letters to Google Docs (formatting stays). Nothing else in the Doc is touched.
-- **Progress** (checked pages, page links, corrections list): a hidden file in your Drive's app-data area, readable only by Melvani. To erase it: Google Drive → Settings → **Manage apps** → Melvani → **Delete hidden app data**.
+- **Your Doc**: each save sends only the changed letters to Google Docs (formatting stays). Nothing else in the Doc is touched.
+- **Progress** (checked pages, where you are, corrections list): a hidden file in your Drive's app-data area, readable only by Melvani. To erase it: Google Drive → Settings → **Manage apps** → Melvani → **Delete hidden app data**.
 - **On each device**: the one-hour sign-in and view settings (text size, zoom, pane sizes).
 - **Other services**: fonts come from Google Fonts; a PDF reader loads from cdnjs only when the folder has PDFs; the **ગુ** typing helper sends the English letters you type to Google's input-tools service. That service is unofficial and may stop working someday — the device keyboard always works.
 
 ## Limits
 
 - Splitting or joining paragraphs, and anything touching images or tables of contents, is done in Google Docs.
-- If someone edits the Doc at the same time, Melvani reapplies your fix on the latest version. If that paragraph itself changed, it reloads the text and asks you to redo the fix.
+- If the Doc is edited somewhere else at the same time, Google refuses Melvani's next save; Melvani reloads the text and applies your fix to the latest version. If that paragraph itself changed, it tells you and asks you to redo the fix.
+- The Google account you sign in with needs edit access to the Doc. If it can only view it, Melvani says so and doesn't open paragraphs for typing.
 - Suggestion mode isn't used; saves are direct edits.
 
 ## Updating the app later
